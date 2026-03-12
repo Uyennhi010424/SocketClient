@@ -4,19 +4,69 @@
  */
 package com.mycompany.socketclient.UI;
 
+import com.mycompany.socketclient.Client;
+import java.io.BufferedReader;
+import java.io.File;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author LEGION
  */
 public class Chat extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Chat.class.getName());
+    private Client client;
 
     /**
      * Creates new form Chat
      */
     public Chat() {
+
+    }
+
+    public Chat(Client client) {
         initComponents();
+        this.client = client;
+        BufferedReader in = client.getReader();
+
+        new Thread(() -> {
+
+            try {
+
+                String message;
+
+                while ((message = in.readLine()) != null) {
+
+                    if (message.startsWith("USERS:")) {
+
+                        String users = message.substring(6);
+                        String[] list = users.split(",");
+
+                        javax.swing.DefaultListModel model = new javax.swing.DefaultListModel();
+
+                        for (String u : list) {
+                            if (!u.isEmpty()) {
+                                model.addElement(u);
+                            }
+                        }
+
+                        jList1.setModel(model);
+
+                    } else {
+
+                        jTextArea1.append(message + "\n");
+
+                    }
+
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }).start();
     }
 
     /**
@@ -35,7 +85,7 @@ public class Chat extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTextPane1 = new javax.swing.JTextPane();
+        jTextArea1 = new javax.swing.JTextArea();
         jPanel3 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
@@ -78,7 +128,10 @@ public class Chat extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel2.setText("Group Chat");
 
-        jScrollPane3.setViewportView(jTextPane1);
+        jTextArea1.setColumns(20);
+        jTextArea1.setFont(new java.awt.Font("Segoe UI Emoji", 0, 12)); // NOI18N
+        jTextArea1.setRows(5);
+        jScrollPane3.setViewportView(jTextArea1);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -86,12 +139,12 @@ public class Chat extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane3)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 366, Short.MAX_VALUE)
                 .addContainerGap())
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(150, 150, 150)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(151, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(132, 132, 132))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -102,11 +155,23 @@ public class Chat extends javax.swing.JFrame {
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
+        jButton1.setFont(new java.awt.Font("Segoe UI Emoji", 0, 12)); // NOI18N
         jButton1.setText("Emoji");
+        jButton1.addActionListener(this::jButton1ActionPerformed);
 
         jButton2.setText("File");
+        jButton2.addActionListener(this::jButton2ActionPerformed);
+
+        jTextField1.setFont(new java.awt.Font("Segoe UI Emoji", 0, 12)); // NOI18N
+        jTextField1.addActionListener(this::jTextField1ActionPerformed);
+        jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTextField1KeyPressed(evt);
+            }
+        });
 
         jButton3.setText("Send");
+        jButton3.addActionListener(this::jButton3ActionPerformed);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -129,10 +194,9 @@ public class Chat extends javax.swing.JFrame {
                 .addGap(14, 14, 14)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
-                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
-                        .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
+                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(16, Short.MAX_VALUE))
         );
 
@@ -164,6 +228,87 @@ public class Chat extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        sendMessage();   // TODO add your handling code here:
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+
+    }//GEN-LAST:event_jTextField1ActionPerformed
+
+    private void jTextField1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyPressed
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+            sendMessage();
+        }
+    }//GEN-LAST:event_jTextField1KeyPressed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        showEmoji();        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        sendFile();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void showEmoji() {
+
+        String[] emojis = {"😀", "😂", "😍", "😎", "😭", "👍", "❤️", "🥰", "😡"};
+
+        String emoji = (String) javax.swing.JOptionPane.showInputDialog(
+                this,
+                "Chọn Emoji:",
+                "Emoji",
+                javax.swing.JOptionPane.PLAIN_MESSAGE,
+                null,
+                emojis,
+                emojis[0]);
+
+        if (emoji != null) {
+            jTextField1.setText(jTextField1.getText() + emoji);
+        }
+    }
+
+    private void sendMessage() {
+
+        String msg = jTextField1.getText().trim();
+
+        if (!msg.isEmpty()) {
+            client.sendMessage(msg);
+
+            addMessage("Me: " + msg);
+
+            jTextField1.setText("\n ");
+        }
+
+    }
+
+    public void addMessage(String msg) {
+
+        jTextArea1.setText(jTextArea1.getText() + "\n" + msg);
+
+        jTextArea1.setCaretPosition(
+                jTextArea1.getDocument().getLength()
+        );
+    }
+
+    private void sendFile() {
+
+        JFileChooser chooser = new JFileChooser();
+
+        int result = chooser.showOpenDialog(this);
+
+        if (result == JFileChooser.APPROVE_OPTION) {
+
+            File file = chooser.getSelectedFile();
+
+            client.sendMessage("[FILE] " + file.getName());
+
+            JOptionPane.showMessageDialog(this,
+                    "Đã gửi file: " + file.getName());
+        }
+    }
 
     /**
      * @param args the command line arguments
@@ -202,7 +347,7 @@ public class Chat extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextPane jTextPane1;
     // End of variables declaration//GEN-END:variables
 }
