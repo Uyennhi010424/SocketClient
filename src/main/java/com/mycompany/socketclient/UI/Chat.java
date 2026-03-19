@@ -5,10 +5,15 @@
 package com.mycompany.socketclient.UI;
 
 import com.mycompany.socketclient.Client;
+import java.awt.Color;
+import java.awt.Font;
 import java.io.BufferedReader;
 import java.io.File;
+import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.ListSelectionModel;
 
 /**
  *
@@ -18,16 +23,22 @@ public class Chat extends javax.swing.JFrame {
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Chat.class.getName());
     private Client client;
+    private String selectedPrivateUser;
+    private final java.util.Map<String, StringBuilder> privateHistories = new java.util.HashMap<>();
 
     /**
      * Creates new form Chat
      */
     public Chat() {
+        initComponents();
+        configureUI();
+        setLocationRelativeTo(null);
 
     }
 
     public Chat(Client client) {
         initComponents();
+        configureUI();
         this.client = client;
         BufferedReader in = client.getReader();
 
@@ -44,10 +55,11 @@ public class Chat extends javax.swing.JFrame {
                         String users = message.substring(6);
                         String[] list = users.split(",");
 
-                        javax.swing.DefaultListModel model = new javax.swing.DefaultListModel();
+                        DefaultListModel<String> model = new DefaultListModel<>();
+                        String currentUser = client != null ? client.getUsername() : null;
 
                         for (String u : list) {
-                            if (!u.isEmpty()) {
+                            if (!u.isEmpty() && (currentUser == null || !u.equalsIgnoreCase(currentUser))) {
                                 model.addElement(u);
                             }
                         }
@@ -55,8 +67,7 @@ public class Chat extends javax.swing.JFrame {
                         jList1.setModel(model);
 
                     } else {
-
-                        jTextArea1.append(message + "\n");
+                        routeIncomingMessage(message);
 
                     }
 
@@ -85,6 +96,12 @@ public class Chat extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        jPanel6 = new javax.swing.JPanel();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        jTextArea3 = new javax.swing.JTextArea();
+        jPanel7 = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         jPanel3 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
@@ -94,7 +111,10 @@ public class Chat extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jPanel1.setBackground(new java.awt.Color(243, 247, 255));
+
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(30, 58, 138));
         jLabel1.setText("Online Users");
 
         jList1.setModel(new javax.swing.AbstractListModel<String>() {
@@ -125,13 +145,50 @@ public class Chat extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(30, 58, 138));
         jLabel2.setText("Group Chat");
 
+        jTabbedPane1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+
+        jTextArea3.setColumns(20);
+        jTextArea3.setRows(5);
+        jScrollPane5.setViewportView(jTextArea3);
+
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 364, Short.MAX_VALUE)
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE)
+        );
+
+        jTabbedPane1.addTab("Nhóm", jPanel6);
+
         jTextArea1.setColumns(20);
-        jTextArea1.setFont(new java.awt.Font("Segoe UI Emoji", 0, 12)); // NOI18N
         jTextArea1.setRows(5);
-        jScrollPane3.setViewportView(jTextArea1);
+        jScrollPane2.setViewportView(jTextArea1);
+
+        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 364, Short.MAX_VALUE)
+        );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE)
+        );
+
+        jTabbedPane1.addTab("Cá nhân", jPanel7);
+
+        jScrollPane3.setViewportView(jTabbedPane1);
+        jTabbedPane1.getAccessibleContext().setAccessibleName("");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -139,7 +196,7 @@ public class Chat extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 366, Short.MAX_VALUE)
+                .addComponent(jScrollPane3)
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -155,10 +212,16 @@ public class Chat extends javax.swing.JFrame {
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
+        jPanel3.setBackground(new java.awt.Color(243, 247, 255));
+
+        jButton1.setBackground(new java.awt.Color(241, 232, 226));
         jButton1.setFont(new java.awt.Font("Segoe UI Emoji", 0, 12)); // NOI18N
+        jButton1.setForeground(new java.awt.Color(51, 71, 85));
         jButton1.setText("Emoji");
         jButton1.addActionListener(this::jButton1ActionPerformed);
 
+        jButton2.setBackground(new java.awt.Color(241, 232, 226));
+        jButton2.setForeground(new java.awt.Color(51, 71, 85));
         jButton2.setText("File");
         jButton2.addActionListener(this::jButton2ActionPerformed);
 
@@ -170,6 +233,8 @@ public class Chat extends javax.swing.JFrame {
             }
         });
 
+        jButton3.setBackground(new java.awt.Color(37, 99, 235));
+        jButton3.setForeground(new java.awt.Color(255, 255, 255));
         jButton3.setText("Send");
         jButton3.addActionListener(this::jButton3ActionPerformed);
 
@@ -212,7 +277,7 @@ public class Chat extends javax.swing.JFrame {
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(116, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -223,8 +288,10 @@ public class Chat extends javax.swing.JFrame {
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(21, Short.MAX_VALUE))
+                .addContainerGap(78, Short.MAX_VALUE))
         );
+
+        getAccessibleContext().setAccessibleName("Chung");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -252,6 +319,105 @@ public class Chat extends javax.swing.JFrame {
         sendFile();
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void configureUI() {
+        setTitle("ZEPLAO CHAT");
+
+        Color background = new Color(245, 247, 250);
+        Color panelBackground = new Color(255, 255, 255);
+        Color accent = new Color(0, 104, 255);
+        Color accentDark = new Color(0, 90, 220);
+        Color border = new Color(220, 226, 234);
+
+        getContentPane().setBackground(background);
+        jPanel1.setBackground(panelBackground);
+        jPanel3.setBackground(panelBackground);
+        jPanel6.setBackground(panelBackground);
+        jPanel7.setBackground(panelBackground);
+
+        jLabel1.setForeground(new Color(30, 30, 30));
+        jLabel2.setForeground(new Color(30, 30, 30));
+
+        jList1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        jList1.setFixedCellHeight(28);
+        jList1.setBorder(BorderFactory.createEmptyBorder(4, 8, 4, 8));
+        jList1.setBackground(Color.WHITE);
+        jList1.setSelectionBackground(new Color(220, 232, 255));
+        jList1.setSelectionForeground(new Color(30, 30, 30));
+
+        jTextArea3.setEditable(false);
+        jTextArea3.setLineWrap(true);
+        jTextArea3.setWrapStyleWord(true);
+        jTextArea3.setBorder(BorderFactory.createEmptyBorder(8, 10, 8, 10));
+        jTextArea3.setBackground(Color.WHITE);
+
+        jTextArea1.setEditable(false);
+        jTextArea1.setLineWrap(true);
+        jTextArea1.setWrapStyleWord(true);
+        jTextArea1.setBorder(BorderFactory.createEmptyBorder(8, 10, 8, 10));
+        jTextArea1.setBackground(Color.WHITE);
+
+        jTextField1.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(border),
+                BorderFactory.createEmptyBorder(6, 10, 6, 10)));
+        jTextField1.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 12));
+
+        jButton1.setBackground(accent);
+        jButton1.setForeground(Color.WHITE);
+        jButton2.setBackground(accent);
+        jButton2.setForeground(Color.WHITE);
+        jButton3.setBackground(accent);
+        jButton3.setForeground(Color.WHITE);
+        jButton1.setFocusPainted(false);
+        jButton2.setFocusPainted(false);
+        jButton3.setFocusPainted(false);
+        jButton1.setBorder(new javax.swing.border.EmptyBorder(8, 16, 8, 16));
+        jButton2.setBorder(new javax.swing.border.EmptyBorder(8, 16, 8, 16));
+        jButton3.setBorder(new javax.swing.border.EmptyBorder(8, 16, 8, 16));
+        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+
+        java.awt.event.MouseAdapter hover = new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                ((javax.swing.JButton) evt.getSource()).setBackground(accentDark);
+            }
+
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                ((javax.swing.JButton) evt.getSource()).setBackground(accent);
+            }
+        };
+        jButton1.addMouseListener(hover);
+        jButton2.addMouseListener(hover);
+        jButton3.addMouseListener(hover);
+
+        jTabbedPane1.setBackground(panelBackground);
+        jTabbedPane1.setBorder(BorderFactory.createLineBorder(border));
+        jTabbedPane1.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+
+        jPanel1.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(border),
+                BorderFactory.createEmptyBorder(8, 8, 8, 8)));
+        jPanel3.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(border),
+                BorderFactory.createEmptyBorder(8, 8, 8, 8)));
+        jPanel6.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(border),
+                BorderFactory.createEmptyBorder(6, 6, 6, 6)));
+        jPanel7.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(border),
+                BorderFactory.createEmptyBorder(6, 6, 6, 6)));
+        jScrollPane1.setBorder(BorderFactory.createLineBorder(border));
+        jScrollPane3.setBorder(BorderFactory.createLineBorder(border));
+        jScrollPane2.setBorder(BorderFactory.createLineBorder(border));
+
+        jList1.addListSelectionListener(evt -> {
+            if (!evt.getValueIsAdjusting()) {
+                selectedPrivateUser = jList1.getSelectedValue();
+                renderPrivateHistory(selectedPrivateUser);
+            }
+        });
+    }
+
     private void showEmoji() {
 
         String[] emojis = {"😀", "😂", "😍", "😎", "😭", "👍", "❤️", "🥰", "😡"};
@@ -271,26 +437,229 @@ public class Chat extends javax.swing.JFrame {
     }
 
     private void sendMessage() {
-
         String msg = jTextField1.getText().trim();
 
         if (!msg.isEmpty()) {
-            client.sendMessage(msg);
+            if (jTabbedPane1.getSelectedIndex() == 1) {
+                sendPrivateMessage(msg);
+            } else {
+                client.sendMessage(msg);
+                addGroupMessage("Me: " + msg);
+            }
 
-            addMessage("Me: " + msg);
-
-            jTextField1.setText("\n ");
+            jTextField1.setText("");
         }
 
     }
 
-    public void addMessage(String msg) {
+    private void sendPrivateMessage(String msg) {
+        if (selectedPrivateUser == null || selectedPrivateUser.isBlank()) {
+            JOptionPane.showMessageDialog(this,
+                    "Hãy chọn user để chat cá nhân.",
+                    "Chưa chọn user",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
 
-        jTextArea1.setText(jTextArea1.getText() + "\n" + msg);
+        if (client != null && selectedPrivateUser.equalsIgnoreCase(client.getUsername())) {
+            JOptionPane.showMessageDialog(this,
+                    "Không thể chat với chính mình.",
+                    "User không hợp lệ",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
 
-        jTextArea1.setCaretPosition(
-                jTextArea1.getDocument().getLength()
+        client.sendMessage("/pm " + selectedPrivateUser + " " + msg);
+        addPrivateMessage("Me -> " + selectedPrivateUser + ": " + msg);
+    }
+
+    private void routeIncomingMessage(String message) {
+        if (isPrivateMessage(message)) {
+            PrivateMessage parsed = parsePrivateMessage(message);
+            String display = parsed.body;
+            if (parsed.sender != null && !parsed.sender.isBlank()) {
+                display = parsed.sender + ": " + parsed.body;
+            }
+            addPrivateMessage(parsed.sender, display);
+            jTabbedPane1.setSelectedIndex(1);
+            return;
+        }
+
+        addGroupMessage(message);
+    }
+
+    private boolean isPrivateMessage(String message) {
+        String trimmed = message == null ? "" : message.trim();
+        return trimmed.startsWith("PRIVATE:")
+                || trimmed.startsWith("PM:")
+                || trimmed.startsWith("[PM]")
+                || trimmed.startsWith("(PM)")
+                || trimmed.startsWith("[PRIVATE]")
+                || trimmed.startsWith("/pm ")
+                || trimmed.startsWith("/w ")
+                || trimmed.startsWith("/msg ")
+                || trimmed.startsWith("/whisper ")
+                || indexOfPrivateCommand(trimmed) >= 0;
+    }
+
+    private String stripPrivatePrefix(String message) {
+        String trimmed = message == null ? "" : message.trim();
+        if (trimmed.startsWith("PRIVATE:")) {
+            return trimmed.substring("PRIVATE:".length()).trim();
+        }
+        if (trimmed.startsWith("PM:")) {
+            return trimmed.substring("PM:".length()).trim();
+        }
+        if (trimmed.startsWith("[PM]")) {
+            return trimmed.substring("[PM]".length()).trim();
+        }
+        if (trimmed.startsWith("(PM)")) {
+            return trimmed.substring("(PM)".length()).trim();
+        }
+        if (trimmed.startsWith("[PRIVATE]")) {
+            return trimmed.substring("[PRIVATE]".length()).trim();
+        }
+        if (trimmed.startsWith("/pm ")
+                || trimmed.startsWith("/w ")
+                || trimmed.startsWith("/msg ")
+                || trimmed.startsWith("/whisper ")) {
+            return stripLeadingUserToken(stripPrivateCommand(trimmed));
+        }
+
+        int commandIndex = indexOfPrivateCommand(trimmed);
+        if (commandIndex >= 0) {
+            String before = trimmed.substring(0, commandIndex).trim();
+            String commandPart = trimmed.substring(commandIndex).trim();
+            String body = stripPrivateCommand(commandPart);
+            if (before.isEmpty()) {
+                return body;
+            }
+            return (before + " " + body).trim();
+        }
+
+        return stripLeadingUserToken(trimmed);
+    }
+
+    private int indexOfPrivateCommand(String message) {
+        if (message == null) {
+            return -1;
+        }
+        String lower = message.toLowerCase();
+        int idx = lower.indexOf("/pm ");
+        if (idx >= 0) {
+            return idx;
+        }
+        idx = lower.indexOf("/w ");
+        if (idx >= 0) {
+            return idx;
+        }
+        idx = lower.indexOf("/msg ");
+        if (idx >= 0) {
+            return idx;
+        }
+        return lower.indexOf("/whisper ");
+    }
+
+    private String stripPrivateCommand(String message) {
+        String trimmed = message == null ? "" : message.trim();
+        if (trimmed.startsWith("/pm ")) {
+            trimmed = trimmed.substring(4).trim();
+        } else if (trimmed.startsWith("/w ")) {
+            trimmed = trimmed.substring(3).trim();
+        } else if (trimmed.startsWith("/msg ")) {
+            trimmed = trimmed.substring(5).trim();
+        } else if (trimmed.startsWith("/whisper ")) {
+            trimmed = trimmed.substring(9).trim();
+        }
+
+        int spaceIndex = trimmed.indexOf(' ');
+        if (spaceIndex > -1) {
+            trimmed = trimmed.substring(spaceIndex + 1).trim();
+        }
+
+        return trimmed;
+    }
+
+    private String stripLeadingUserToken(String message) {
+        String trimmed = message == null ? "" : message.trim();
+        if (!trimmed.contains(" ")) {
+            return trimmed;
+        }
+
+        int firstSpace = trimmed.indexOf(' ');
+        String firstToken = trimmed.substring(0, firstSpace).replace(":", "");
+        String currentUser = client != null ? client.getUsername() : null;
+
+        if ((selectedPrivateUser != null && firstToken.equalsIgnoreCase(selectedPrivateUser))
+                || (currentUser != null && firstToken.equalsIgnoreCase(currentUser))) {
+            return trimmed.substring(firstSpace + 1).trim();
+        }
+
+        return trimmed;
+    }
+
+    public void addGroupMessage(String msg) {
+        jTextArea3.setText(jTextArea3.getText() + "\n" + msg);
+        jTextArea3.setCaretPosition(
+                jTextArea3.getDocument().getLength()
         );
+    }
+
+    public void addPrivateMessage(String msg) {
+        addPrivateMessage(null, msg);
+    }
+
+    private void addPrivateMessage(String user, String msg) {
+        String key = (user == null || user.isBlank()) ? "_unknown" : user;
+        StringBuilder history = privateHistories.computeIfAbsent(key, k -> new StringBuilder());
+        history.append("\n").append(msg);
+
+        if (selectedPrivateUser == null && "_unknown".equals(key)) {
+            renderPrivateHistory(key);
+        } else if (selectedPrivateUser != null && selectedPrivateUser.equalsIgnoreCase(key)) {
+            renderPrivateHistory(key);
+        }
+    }
+
+    private void renderPrivateHistory(String user) {
+        if (user == null || user.isBlank()) {
+            jTextArea1.setText("");
+            return;
+        }
+
+        StringBuilder history = privateHistories.get(user);
+        jTextArea1.setText(history == null ? "" : history.toString().trim());
+        jTextArea1.setCaretPosition(jTextArea1.getDocument().getLength());
+    }
+
+    private PrivateMessage parsePrivateMessage(String message) {
+        String trimmed = message == null ? "" : message.trim();
+        String content = stripPrivatePrefix(trimmed);
+
+        String sender = null;
+        String body = content;
+
+        int colonIndex = content.indexOf(':');
+        if (colonIndex > -1) {
+            String possibleSender = content.substring(0, colonIndex).trim();
+            String possibleBody = content.substring(colonIndex + 1).trim();
+            if (!possibleSender.isBlank() && !possibleBody.isBlank()) {
+                sender = possibleSender.replace("[", "").replace("]", "");
+                body = possibleBody;
+            }
+        }
+
+        return new PrivateMessage(sender, body);
+    }
+
+    private static class PrivateMessage {
+        final String sender;
+        final String body;
+
+        PrivateMessage(String sender, String body) {
+            this.sender = sender;
+            this.body = body == null ? "" : body;
+        }
     }
 
     private void sendFile() {
@@ -303,7 +672,29 @@ public class Chat extends javax.swing.JFrame {
 
             File file = chooser.getSelectedFile();
 
-            client.sendMessage("[FILE] " + file.getName());
+            if (jTabbedPane1.getSelectedIndex() == 1) {
+                if (selectedPrivateUser == null || selectedPrivateUser.isBlank()) {
+                    JOptionPane.showMessageDialog(this,
+                            "Hãy chọn user để gửi file cá nhân.",
+                            "Chưa chọn user",
+                            JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
+                if (client != null && selectedPrivateUser.equalsIgnoreCase(client.getUsername())) {
+                    JOptionPane.showMessageDialog(this,
+                            "Không thể gửi file cho chính mình.",
+                            "User không hợp lệ",
+                            JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
+                client.sendMessage("/pm " + selectedPrivateUser + " [FILE] " + file.getName());
+                addPrivateMessage(selectedPrivateUser, "Me -> " + selectedPrivateUser + ": [FILE] " + file.getName());
+            } else {
+                client.sendMessage("[FILE] " + file.getName());
+                addGroupMessage("Me: [FILE] " + file.getName());
+            }
 
             JOptionPane.showMessageDialog(this,
                     "Đã gửi file: " + file.getName());
@@ -345,9 +736,15 @@ public class Chat extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTextArea jTextArea3;
     private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 }

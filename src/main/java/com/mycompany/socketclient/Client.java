@@ -44,4 +44,8 @@ public class Client {
     public BufferedReader getReader() {
         return in;
     }
+
+    public String getUsername() {
+        return username;
+    }
 }

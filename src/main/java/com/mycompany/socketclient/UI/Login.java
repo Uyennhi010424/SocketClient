@@ -6,6 +6,11 @@ package com.mycompany.socketclient.UI;
 
 import com.mycompany.socketclient.Client;
 import com.mycompany.socketclient.UserManager;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Font;
+import javax.swing.BorderFactory;
+
 /**
  *
  * @author LEGION
@@ -19,15 +24,78 @@ public class Login extends javax.swing.JFrame {
      */
     public Login() {
         initComponents();
-
+        configureUI();
         setLocationRelativeTo(null); // căn giữa màn hình
+    }
 
-        // bo góc button
-        jButton1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(52, 152, 219), 1, true));
-        jButton2.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(46, 204, 113), 1, true));
+    private void configureUI() {
+        setTitle("ZEPLAO CHAT");
 
+        Color background = new Color(245, 247, 250);
+        Color panelBackground = new Color(255, 255, 255);
+        Color accent = new Color(0, 104, 255);
+        Color accentDark = new Color(0, 90, 220);
+        Color border = new Color(220, 226, 234);
+
+        getContentPane().setBackground(background);
+        jPanel1.setBackground(panelBackground);
+        jPanel1.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(border),
+                BorderFactory.createEmptyBorder(20, 20, 20, 20)));
+
+        jLabel1.setForeground(new Color(30, 30, 30));
+        jLabel1.setFont(new Font("Segoe UI", Font.BOLD, 24));
+        jLabel4.setForeground(new Color(120, 120, 120));
+        jLabel2.setForeground(new Color(90, 90, 90));
+        jLabel3.setForeground(new Color(90, 90, 90));
+        jLabel2.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        jLabel3.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        jLabel5.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        jLabel5.setForeground(new Color(200, 80, 80));
+
+        jTextField1.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createMatteBorder(0, 0, 1, 0, border),
+                BorderFactory.createEmptyBorder(6, 4, 6, 4)));
+        jPasswordField1.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createMatteBorder(0, 0, 1, 0, border),
+                BorderFactory.createEmptyBorder(6, 4, 6, 4)));
+        jTextField1.setBackground(Color.WHITE);
+        jPasswordField1.setBackground(Color.WHITE);
+
+        jTextField1.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+        jPasswordField1.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+
+        jButton1.setBackground(accent);
+        jButton1.setForeground(Color.WHITE);
         jButton1.setFocusPainted(false);
+        jButton1.setBorder(new javax.swing.border.EmptyBorder(10, 20, 10, 20));
+        jButton1.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        jButton2.setBackground(panelBackground);
+        jButton2.setForeground(accent);
         jButton2.setFocusPainted(false);
+        jButton2.setBorder(BorderFactory.createLineBorder(accent));
+        jButton2.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jButton1.setBackground(accentDark);
+            }
+
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jButton1.setBackground(accent);
+            }
+        });
+
+        jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jButton2.setBackground(new Color(230, 240, 255));
+            }
+
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jButton2.setBackground(panelBackground);
+            }
+        });
     }
 
     /**
@@ -48,37 +116,44 @@ public class Login extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         jPasswordField1 = new javax.swing.JPasswordField();
+        jLabel5 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel1.setBackground(new java.awt.Color(245, 246, 250));
-        jPanel1.setForeground(new java.awt.Color(255, 153, 255));
+        jPanel1.setBackground(new java.awt.Color(243, 247, 255));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(44, 62, 80));
+        jLabel1.setForeground(new java.awt.Color(30, 58, 138));
         jLabel1.setText("ZEPLAO CHAT");
 
         jTextField1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jTextField1.addActionListener(this::jTextField1ActionPerformed);
 
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(51, 71, 85));
         jLabel2.setText("Username :");
 
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(51, 71, 85));
         jLabel3.setText("Password :");
 
-        jButton1.setBackground(new java.awt.Color(52, 152, 219));
+        jButton1.setBackground(new java.awt.Color(37, 99, 235));
         jButton1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jButton1.setForeground(new java.awt.Color(255, 255, 255));
         jButton1.setText("Đăng Nhập");
         jButton1.addActionListener(this::jButton1ActionPerformed);
 
-        jButton2.setBackground(new java.awt.Color(46, 204, 113));
+        jButton2.setBackground(new java.awt.Color(29, 78, 216));
         jButton2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jButton2.setForeground(new java.awt.Color(255, 255, 255));
         jButton2.setText("Đăng Ký");
         jButton2.addActionListener(this::jButton2ActionPerformed);
 
-        jLabel4.setForeground(new java.awt.Color(204, 204, 204));
+        jLabel4.setForeground(new java.awt.Color(100, 114, 139));
         jLabel4.setText("Welcome to Chat System");
+
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -86,11 +161,6 @@ public class Login extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(93, 93, 93)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(40, 40, 40)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(150, 150, 150)
                         .addComponent(jLabel1))
@@ -107,8 +177,16 @@ public class Login extends javax.swing.JFrame {
                                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(163, 163, 163)
-                        .addComponent(jLabel4)))
-                .addContainerGap(63, Short.MAX_VALUE))
+                        .addComponent(jLabel4))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(93, 93, 93)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(40, 40, 40)
+                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addGap(63, 63, 63))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -116,14 +194,16 @@ public class Login extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addGap(36, 36, 36)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(39, 39, 39)
+                    .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
                     .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -137,16 +217,16 @@ public class Login extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(16, 16, 16)
+                .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(20, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18))
+                .addContainerGap())
         );
 
         pack();
@@ -157,18 +237,18 @@ public class Login extends javax.swing.JFrame {
         String password = new String(jPasswordField1.getPassword());
 
         if (username.isEmpty() || password.isEmpty()) {
-            javax.swing.JOptionPane.showMessageDialog(this,
-                    "Vui lòng nhập đầy đủ thông tin!");
+            jLabel5.setForeground(java.awt.Color.RED);
+            jLabel5.setText("Vui lòng nhập đầy đủ thông tin!");
             return;
         }
 
-       if (UserManager.login(username, password)){
+        if (UserManager.login(username, password)) {
 
-            javax.swing.JOptionPane.showMessageDialog(this,
-                    "Đăng nhập thành công!");
+            jLabel5.setForeground(new java.awt.Color(0, 153, 0));
+            jLabel5.setText("Đăng nhập thành công!");
 
             Client client = new Client();
-            client.connect("localhost", 1115,username);
+            client.connect("localhost", 1111, username);
 
             Chat chat = new Chat(client);
             chat.setVisible(true);
@@ -176,12 +256,13 @@ public class Login extends javax.swing.JFrame {
             this.dispose();
 
         } else {
-            javax.swing.JOptionPane.showMessageDialog(this,
-                    "Sai tài khoản hoặc mật khẩu!");
-        }
 
+            jLabel5.setForeground(java.awt.Color.RED);
+            jLabel5.setText("Sai tài khoản hoặc mật khẩu!");
+        }
 // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
+
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         Register register = new Register();
@@ -227,6 +308,7 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPasswordField jPasswordField1;
     private javax.swing.JTextField jTextField1;
